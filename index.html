@@ -5,13 +5,20 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Värmeöverföringskalkylator</title>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    
-    <script type="text/javascript" id="MathJax-script" async
-        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
-    </script>
+    <!-- MathJax configuration for rendering LaTeX equations -->
+    <script>
+        MathJax = {
+          tex: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']]
+          }
+        };
+        </script>
+        <script type="text/javascript" id="MathJax-script" async
+          src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+        </script>
     
     <style>
+        /* Global styles */
         body {
             font-family: Arial, sans-serif;
             background-color: #f4f4f4;
@@ -20,19 +27,23 @@
             padding: 20px;
         }
 
+        /* Header styles */
         h1 {
             text-align: center;
             color: #4CAF50;
         }
 
+        /* Image styles */
         img {
             width: 100%;
         }
 
+        /* MathJax equation styles */
         .MJX-TEX {
             font-size: 150%;
         }
 
+        /* Main container styles */
         .container {
             max-width: 800px;
             margin: auto;
@@ -42,6 +53,7 @@
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
 
+        /* Form input styles */
         label {
             display: block;
             margin-bottom: 8px;
@@ -57,6 +69,7 @@
             box-sizing: border-box;
         }
 
+        /* Button styles */
         button {
             width: 100%;
             padding: 10px;
@@ -72,6 +85,7 @@
             background-color: #45a049;
         }
 
+        /* Result display styles */
         #result {
             margin-top: 20px;
             font-size: 20px;
@@ -79,6 +93,7 @@
             color: #d9534f;
         }
 
+        /* Explanation section styles */
         .explanation {
             margin-top: 30px;
             padding: 20px;
@@ -91,6 +106,7 @@
             color: #4CAF50;
         }
 
+        /* Equation display styles */
         .equation {
             font-family: "Courier New", Courier, monospace;
             background-color: #eaeaea;
@@ -99,6 +115,7 @@
             margin: 10px 0;
         }
 
+        /* Step-by-step explanation styles */
         .steps {
             margin-top: 20px;
         }
@@ -119,6 +136,7 @@
         <h1>Värmeöverföringskalkylator</h1>
         <p>Ange följande värden:</p>
 
+        <!-- Input fields for heat transfer parameters -->
         <label for="P">P (W):</label>
         <input type="number" id="P" value="11000"><br>
 
@@ -137,66 +155,24 @@
         <label for="T_k1">T_k1 (°C):</label>
         <input type="number" id="T_k1" value="45"><br>
 
+        <!-- Button to trigger calculation -->
         <button onclick="calculateTk2()">Beräkna T_k2</button>
 
+        <!-- Display area for calculation result -->
         <h2 id="result"></h2>
 
+        <!-- Explanation section -->
         <div class="explanation">
             <h2>Förklaring av ekvationen:</h2>
-            <p>Denna kalkylator beräknar sluttemperaturen (<b>T_k2</b>) för den kalla vätskan i en värmeväxlare med
-                hjälp av följande ekvation:</p>
-            <div class="equation">
-                \( P = k \cdot A \cdot \Theta \)
-            </div>
-            <p>Där \( \Theta \) är den logaritmiska medeltemperaturdifferensen (LMTD), beräknad enligt:</p>
-            <div class="equation">
-                \( \Theta = \frac{\Delta T_1 - \Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)} \)
-            </div>
-            <div class="steps">
-                <h3>Steg 1: Definiera temperaturskillnader</h3>
-                <p>Vi vet:</p>
-                <div class="equation">
-                    \( \Delta T_1 = T_{v1} - T_{k2} \) <br>
-                    \( \Delta T_2 = T_{v2} - T_{k1} = 60^\circ C - 45^\circ C = 15^\circ C \)
-                </div>
-
-                <h3>Steg 2: Ersätt i LMTD-formeln</h3>
-                <p>LMTD-formeln blir nu:</p>
-                <div class="equation">
-                    \( \Theta = \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
-                </div>
-
-                <h3>Steg 3: Ersätt LMTD i värmeöverföringsformeln</h3>
-                <p>Substituera \( \Theta \) tillbaka i ekvationen för \( P \):</p>
-                <div class="equation">
-                    \( P = k \cdot A \cdot \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
-                </div>
-                <p>Substituera de givna värdena:</p>
-                <div class="equation">
-                    \( 11000 = 15 \cdot 20 \cdot \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
-                </div>
-
-                <h3>Steg 4: Isolera logaritmtermen</h3>
-                <p>Dela båda sidor med 300:</p>
-                <div class="equation">
-                    \( 36.67 = \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
-                </div>
-
-                <h3>Steg 5: Lös för \( T_{k2} \)</h3>
-                <p>Nu har vi en transcendent ekvation:</p>
-                <div class="equation">
-                    \( 36.67 = \frac{75 - T_{k2}}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
-                </div>
-                <p>Denna ekvation löses bäst med numeriska metoder eller en grafritande kalkylator.</p>
+            <div id="explanation-steps">
+                <!-- The explanation will be dynamically updated here -->
             </div>
         </div>
     </div>
 
     <script>
-        let myChart;
-
         function calculateTk2() {
-            // Hämta inmatade värden
+            // Retrieve input values
             let P = parseFloat(document.getElementById('P').value);
             let k = parseFloat(document.getElementById('k').value);
             let A = parseFloat(document.getElementById('A').value);
@@ -204,10 +180,10 @@
             let T_v2 = parseFloat(document.getElementById('T_v2').value);
             let T_k1 = parseFloat(document.getElementById('T_k1').value);
 
-            // Initialt gissning
+            // Calculate initial guess for T_k2
             let initial_guess = (T_v1 + T_v2 + T_k1) / 3;
 
-            // Funktion för att beräkna LMTD
+            // Define the equation to solve
             function equation(T_k2) {
                 let delta_T1 = T_v1 - T_k2;
                 let delta_T2 = T_v2 - T_k1;
@@ -215,42 +191,75 @@
                 return k * A * LMTD - P;
             }
 
-            // Numerisk metod för att lösa för T_k2
+            // Newton-Raphson method for solving the equation
             function fsolve(func, initial_guess) {
                 let x = initial_guess;
                 let tol = 1e-6;
                 let max_iter = 1000;
                 for (let i = 0; i < max_iter; i++) {
                     let fx = func(x);
-                    let dfx = (func(x + tol) - fx) / tol;  // numerisk derivata
+                    let dfx = (func(x + tol) - fx) / tol;  
                     let new_x = x - fx / dfx;
                     if (Math.abs(new_x - x) < tol) {
                         return new_x;
                     }
                     x = new_x;
                 }
-                return x;  // returnerar den slutliga approximationen
+                return x;  
             }
 
-            // Lös ekvationen
+            // Solve for T_k2
             let T_k2_solution = fsolve(equation, initial_guess);
             document.getElementById('result').innerText = `T_k2-lösning: ${T_k2_solution.toFixed(2)} °C`;
 
-            // Define the range for the zoomed-in view
-            const range = 5; // 5°C on each side of the solution
-            const minX = Math.max(T_k1, T_k2_solution - range);
-            const maxX = Math.min(T_v1, T_k2_solution + range);
+            // Calculate additional values for explanation
+            const delta_T2 = T_v2 - T_k1;
+            const substitutedValue = P / (k * A);
 
-            // Generate data points for the graph
-            const dataPoints = [];
-            for (let x = minX; x <= maxX; x += 0.1) {
-                dataPoints.push({
-                    x: x,
-                    y: equation(x)
-                });
-            }
+            // Generate step-by-step explanation
+            const steps = `
+                <p>Denna kalkylator beräknar sluttemperaturen (<b>T_k2</b>) för den kalla vätskan i en värmeväxlare med hjälp av följande ekvation:</p>
+                <div class="equation">
+                    \\( P = k \\cdot A \\cdot \\Theta \\)
+                </div>
+                <p>Med insatta värden:</p>
+                <div class="equation">
+                    \\( ${P} = ${k} \\cdot ${A} \\cdot \\Theta \\)
+                </div>
+                <p>Där \\( \\Theta \\) är den logaritmiska medeltemperaturdifferensen (LMTD), beräknad enligt:</p>
+                <div class="equation">
+                    \\( \\Theta = \\frac{\\Delta T_1 - \\Delta T_2}{\\ln\\left(\\frac{\\Delta T_1}{\\Delta T_2}\\right)} \\)
+                </div>
+                <p>Vi vet:</p>
+                <div class="equation">
+                    \\( \\Delta T_1 = ${T_v1} - T_{k2} \\)<br>
+                    \\( \\Delta T_2 = ${T_v2} - ${T_k1} = ${delta_T2} \\text{°C} \\)
+                </div>
+                <h3>Steg 2: Ersätt i LMTD-formeln</h3>
+                <p>LMTD-formeln blir nu:</p>
+                <div class="equation">
+                    \\( \\Theta = \\frac{(${T_v1} - T_{k2}) - ${delta_T2}}{\\ln\\left(\\frac{${T_v1} - T_{k2}}{${delta_T2}}\\right)} \\)
+                </div>
+                <h3>Steg 3: Ersätt LMTD i värmeöverföringsformeln</h3>
+                <p>Substituera \\( \\Theta \\) tillbaka i ekvationen för \\( P \\):</p>
+                <div class="equation">
+                    \\( ${P} = ${k} \\cdot ${A} \\cdot \\frac{(${T_v1} - T_{k2}) - ${delta_T2}}{\\ln\\left(\\frac{${T_v1} - T_{k2}}{${delta_T2}}\\right)} \\)
+                </div>
+                <h3>Steg 4: Isolera logaritmtermen</h3>
+                <p>Dela båda sidor med ${k * A}:</p>
+                <div class="equation">
+                    \\( \\frac{${P}}{${k * A}} = \\frac{(${T_v1} - T_{k2}) - ${delta_T2}}{\\ln\\left(\\frac{${T_v1} - T_{k2}}{${delta_T2}}\\right)} \\)
+                </div>
+                <h3>Steg 5: Lös för \\( T_{k2} \\)</h3>
+                <p>Nu har vi en transcendent ekvation som löses bäst med numeriska metoder:</p>
+                <div class="equation">
+                    \\( T_{k2} = ${T_k2_solution.toFixed(2)} \\text{°C} \\)
+                </div>
+            `;
 
-
+            // Update the explanation in the DOM
+            document.getElementById('explanation-steps').innerHTML = steps;
+            MathJax.typeset();  // Re-render the MathJax equations
         }
     </script>
 </body>
