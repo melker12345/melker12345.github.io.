@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Värmeöverföringskalkylator</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js" integrity="sha512-[new-hash-here]" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #4CAF50;
+        }
+
+        img{
+            width: 100%;
+        }
+
+        .MJX-TEX{
+            font-size: 150%;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+        }
+
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 15px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+        }
+
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 20px;
+            text-align: center;
+            color: #d9534f;
+        }
+
+        .explanation {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-left: 5px solid #4CAF50;
+            border-radius: 5px;
+        }
+
+        .explanation h2 {
+            color: #4CAF50;
+        }
+
+        .equation {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #eaeaea;
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+
+        .steps {
+            margin-top: 20px;
+        }
+
+        .steps h3 {
+            color: #4CAF50;
+            margin-bottom: 10px;
+        }
+
+        .steps p {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Värmeöverföringskalkylator</h1>
+        <p>Ange följande värden:</p>
+
+        <label for="P">P (W):</label>
+        <input type="number" id="P" value="11000"><br>
+
+        <label for="k">k (W/m²K):</label>
+        <input type="number" id="k" value="15"><br>
+
+        <label for="A">A (m²):</label>
+        <input type="number" id="A" value="20"><br>
+
+        <label for="T_v1">T_v1 (°C):</label>
+        <input type="number" id="T_v1" value="90"><br>
+
+        <label for="T_v2">T_v2 (°C):</label>
+        <input type="number" id="T_v2" value="60"><br>
+
+        <label for="T_k1">T_k1 (°C):</label>
+        <input type="number" id="T_k1" value="45"><br>
+
+        <button onclick="calculateTk2()">Beräkna T_k2</button>
+
+        <h2 id="result"></h2>
+
+        <canvas id="myChart" width="400" height="200"></canvas>
+
+        <div class="explanation">
+            <h2>Förklaring av ekvationen:</h2>
+            <p>Denna kalkylator beräknar sluttemperaturen (<b>T_k2</b>) för den kalla vätskan i en värmeväxlare med hjälp av följande ekvation:</p>
+            <div class="equation">
+                \( P = k \cdot A \cdot \Theta \)
+            </div>
+            <p>Där \( \Theta \) är den logaritmiska medeltemperaturdifferensen (LMTD), beräknad enligt:</p>
+            <div class="equation">
+                \( \Theta = \frac{\Delta T_1 - \Delta T_2}{\ln\left(\frac{\Delta T_1}{\Delta T_2}\right)} \)
+            </div>
+            <div class="steps">
+                <h3>Steg 1: Definiera temperaturskillnader</h3>
+                <p>Vi vet:</p>
+                <div class="equation">
+                    \( \Delta T_1 = T_{v1} - T_{k2} \) <br>
+                    \( \Delta T_2 = T_{v2} - T_{k1} = 60^\circ C - 45^\circ C = 15^\circ C \)
+                </div>
+
+                <h3>Steg 2: Ersätt i LMTD-formeln</h3>
+                <p>LMTD-formeln blir nu:</p>
+                <div class="equation">
+                    \( \Theta = \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
+                </div>
+
+                <h3>Steg 3: Ersätt LMTD i värmeöverföringsformeln</h3>
+                <p>Substituera \( \Theta \) tillbaka i ekvationen för \( P \):</p>
+                <div class="equation">
+                    \( P = k \cdot A \cdot \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
+                </div>
+                <p>Substituera de givna värdena:</p>
+                <div class="equation">
+                    \( 11000 = 15 \cdot 20 \cdot \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
+                </div>
+
+                <h3>Steg 4: Isolera logaritmtermen</h3>
+                <p>Dela båda sidor med 300:</p>
+                <div class="equation">
+                    \( 36.67 = \frac{(90 - T_{k2}) - 15}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
+                </div>
+
+                <h3>Steg 5: Lös för \( T_{k2} \)</h3>
+                <p>Nu har vi en transcendent ekvation:</p>
+                <div class="equation">
+                    \( 36.67 = \frac{75 - T_{k2}}{\ln\left(\frac{90 - T_{k2}}{15}\right)} \)
+                </div>
+                <p>Denna ekvation löses bäst med numeriska metoder eller en grafritande kalkylator.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myChart;
+
+        function calculateTk2() {
+            // Hämta inmatade värden
+            let P = parseFloat(document.getElementById('P').value);
+            let k = parseFloat(document.getElementById('k').value);
+            let A = parseFloat(document.getElementById('A').value);
+            let T_v1 = parseFloat(document.getElementById('T_v1').value);
+            let T_v2 = parseFloat(document.getElementById('T_v2').value);
+            let T_k1 = parseFloat(document.getElementById('T_k1').value);
+
+            // Initialt gissning
+            let initial_guess = (T_v1 + T_v2 + T_k1) / 3;
+
+            // Funktion för att beräkna LMTD
+            function equation(T_k2) {
+                let delta_T1 = T_v1 - T_k2;
+                let delta_T2 = T_v2 - T_k1;
+                let LMTD = (delta_T1 - delta_T2) / Math.log(delta_T1 / delta_T2);
+                return k * A * LMTD - P;
+            }
+
+            // Numerisk metod för att lösa för T_k2
+            function fsolve(func, initial_guess) {
+                let x = initial_guess;
+                let tol = 1e-6;
+                let max_iter = 1000;
+                for (let i = 0; i < max_iter; i++) {
+                    let fx = func(x);
+                    let dfx = (func(x + tol) - fx) / tol;  // numerisk derivata
+                    let new_x = x - fx / dfx;
+                    if (Math.abs(new_x - x) < tol) {
+                        return new_x;
+                    }
+                    x = new_x;
+                }
+                return x;  // returnerar den slutliga approximationen
+            }
+
+            // Lös ekvationen
+            let T_k2_solution = fsolve(equation, initial_guess);
+            document.getElementById('result').innerText = `T_k2-lösning: ${T_k2_solution.toFixed(2)} °C`;
+
+            // Define the range for the zoomed-in view
+            const range = 5; // 5°C on each side of the solution
+            const minX = Math.max(T_k1, T_k2_solution - range);
+            const maxX = Math.min(T_v1, T_k2_solution + range);
+
+            // Generate data points for the graph
+            const dataPoints = [];
+            for (let x = minX; x <= maxX; x += 0.1) {
+                dataPoints.push({
+                    x: x,
+                    y: equation(x)
+                });
+            }
+
+            // Create or update the chart
+            if (myChart) {
+                myChart.destroy(); // Destroy the existing chart if it exists
+            }
+
+            myChart = new Chart(document.getElementById('myChart'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        label: 'Equation',
+                        data: dataPoints,
+                        borderColor: 'blue',
+                        fill: false
+                    }, {
+                        label: 'Solution',
+                        data: [{x: T_k2_solution, y: 0}],
+                        borderColor: 'red',
+                        pointRadius: 5,
+                        pointHoverRadius: 7,
+                        type: 'scatter'
+                    }]
+                },
+                options: {
+                    scales: {
+                        x: {
+                            type: 'linear',
+                            position: 'bottom',
+                            title: {
+                                display: true,
+                                text: 'T_k2 (°C)'
+                            },
+                            min: minX,
+                            max: maxX
+                        },
+                        y: {
+                            title: {
+                                display: true,
+                                text: 'Equation Value'
+                            },
+                            beginAtZero: true
+                        }
+                    },  
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: 'Equation Graph (Zoomed)'
+                        }
+                    }
+                }
+            });
+        }
+    </script>
+</body>
+</html>
