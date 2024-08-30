@@ -1,11 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Värmeöverföringskalkylator</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js" integrity="sha512-[new-hash-here]" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    
+    <script type="text/javascript" id="MathJax-script" async
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js">
+    </script>
     
     <style>
         body {
@@ -21,11 +25,11 @@
             color: #4CAF50;
         }
 
-        img{
+        img {
             width: 100%;
         }
 
-        .MJX-TEX{
+        .MJX-TEX {
             font-size: 150%;
         }
 
@@ -109,6 +113,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Värmeöverföringskalkylator</h1>
@@ -136,11 +141,10 @@
 
         <h2 id="result"></h2>
 
-        <canvas id="myChart" width="400" height="200"></canvas>
-
         <div class="explanation">
             <h2>Förklaring av ekvationen:</h2>
-            <p>Denna kalkylator beräknar sluttemperaturen (<b>T_k2</b>) för den kalla vätskan i en värmeväxlare med hjälp av följande ekvation:</p>
+            <p>Denna kalkylator beräknar sluttemperaturen (<b>T_k2</b>) för den kalla vätskan i en värmeväxlare med
+                hjälp av följande ekvation:</p>
             <div class="equation">
                 \( P = k \cdot A \cdot \Theta \)
             </div>
@@ -246,57 +250,9 @@
                 });
             }
 
-            // Create or update the chart
-            if (myChart) {
-                myChart.destroy(); // Destroy the existing chart if it exists
-            }
 
-            myChart = new Chart(document.getElementById('myChart'), {
-                type: 'line',
-                data: {
-                    datasets: [{
-                        label: 'Equation',
-                        data: dataPoints,
-                        borderColor: 'blue',
-                        fill: false
-                    }, {
-                        label: 'Solution',
-                        data: [{x: T_k2_solution, y: 0}],
-                        borderColor: 'red',
-                        pointRadius: 5,
-                        pointHoverRadius: 7,
-                        type: 'scatter'
-                    }]
-                },
-                options: {
-                    scales: {
-                        x: {
-                            type: 'linear',
-                            position: 'bottom',
-                            title: {
-                                display: true,
-                                text: 'T_k2 (°C)'
-                            },
-                            min: minX,
-                            max: maxX
-                        },
-                        y: {
-                            title: {
-                                display: true,
-                                text: 'Equation Value'
-                            },
-                            beginAtZero: true
-                        }
-                    },  
-                    plugins: {
-                        title: {
-                            display: true,
-                            text: 'Equation Graph (Zoomed)'
-                        }
-                    }
-                }
-            });
         }
     </script>
 </body>
+
 </html>
